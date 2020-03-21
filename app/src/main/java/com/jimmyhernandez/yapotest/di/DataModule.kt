@@ -1,6 +1,7 @@
 package com.jimmyhernandez.yapotest.di
 
 import com.jimmyhernandez.data.repository.UsersRepository
+import com.jimmyhernandez.data.source.LocalDataSource
 import com.jimmyhernandez.data.source.RemoteDataSource
 import dagger.Module
 import dagger.Provides
@@ -9,6 +10,6 @@ import dagger.Provides
 class DataModule {
 
     @Provides
-    fun usersRepositoryProvider(remoteDataSource: RemoteDataSource) = UsersRepository(remoteDataSource)
+    fun usersRepositoryProvider(localDataSource: LocalDataSource, remoteDataSource: RemoteDataSource) = UsersRepository(localDataSource, remoteDataSource)
 
 }

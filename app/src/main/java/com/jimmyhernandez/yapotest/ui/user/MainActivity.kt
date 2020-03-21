@@ -24,9 +24,10 @@ class MainActivity : AppCompatActivity() {
 
         component = app.component.plus(MainActivityModule())
         viewModel.model.observe(this, Observer(::updateUi))
+        viewModel.model.observe(this, Observer(::showData))
 
-        viewModel.getListUsers()
-
+//        viewModel.getListUsers()
+        viewModel.getAllUsers()
 
     }
 
@@ -57,6 +58,33 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
+
+    private fun showData(event: Data<ArrayList<UserResponse>>?) {
+        event.with {
+            when (dataState) {
+                DataState.LOADING -> {
+//                    if (ifLoading) progress.visibility = View.VISIBLE else progressNextItems.visibility =
+//                        View.VISIBLE
+                }
+                DataState.SUCCESS -> {
+//                    progress.visibility = View.GONE
+//                    progressNextItems.visibility = View.GONE
+//                    ifLoading = true
+                }
+                DataState.ERROR -> {
+//                    progress.visibility = View.GONE
+//                    progressNextItems.visibility = View.GONE
+//                    ifLoading = true
+                }
+            }
+
+            data.notNull {
+//                itunesAdapter.updateListSongs(it)
+            }
+        }
+    }
+
 
 
 }

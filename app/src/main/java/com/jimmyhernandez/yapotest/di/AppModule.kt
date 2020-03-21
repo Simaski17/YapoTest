@@ -1,6 +1,11 @@
 package com.jimmyhernandez.yapotest.di
 
+import android.app.Application
+import androidx.room.Room
+import com.jimmyhernandez.data.source.LocalDataSource
 import com.jimmyhernandez.data.source.RemoteDataSource
+import com.jimmyhernandez.yapotest.data.database.RoomDataSource
+import com.jimmyhernandez.yapotest.data.database.UsersDatabase
 import com.jimmyhernandez.yapotest.data.server.TheYapoDbDatasource
 import com.jimmyhernandez.yapotest.data.server.TheYapoDbService
 import dagger.Module
@@ -14,6 +19,17 @@ import javax.inject.Singleton
 
 @Module
 class AppModule {
+
+    @Provides
+    @Singleton
+    fun databaseProvider(app: Application) = Room.databaseBuilder(
+        app,
+        UsersDatabase::class.java,
+        "users-db"
+    ).build()
+
+    @Provides
+    fun localDataSourceProvider(db: UsersDatabase): LocalDataSource = RoomDataSource(db)
 
     @Singleton
     @Provides
