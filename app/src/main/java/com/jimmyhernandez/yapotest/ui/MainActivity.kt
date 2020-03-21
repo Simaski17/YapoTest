@@ -1,7 +1,8 @@
-package com.jimmyhernandez.yapotest
+package com.jimmyhernandez.yapotest.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.jimmyhernandez.yapotest.R
 
 class MainActivity : AppCompatActivity() {
 
