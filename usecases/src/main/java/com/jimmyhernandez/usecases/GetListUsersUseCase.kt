@@ -5,6 +5,6 @@ import com.jimmyhernandez.domain.users.UserResponse
 
 class GetListUsersUseCase(private val usersRepository: UsersRepository) {
 
-    suspend fun invoke(): List<UserResponse> = usersRepository.getListUsers()
+    suspend fun invoke(): ArrayList<UserResponse> = usersRepository.getListUsers()
 
 }

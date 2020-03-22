@@ -6,7 +6,7 @@ import com.jimmyhernandez.domain.users.UserResponse
 
 class UsersRepository(private val localDataSource: LocalDataSource, private val remoteDataSource: RemoteDataSource) {
 
-    suspend fun getListUsers(): List<UserResponse> {
+    suspend fun getListUsers(): ArrayList<UserResponse> {
         var users = remoteDataSource.getListUsers()
         localDataSource.saveListUsers((users as List<UserResponse>?)!!)
         return users
@@ -15,5 +15,10 @@ class UsersRepository(private val localDataSource: LocalDataSource, private val 
     suspend fun getAllUsers(): List<UserResponse> {
         return localDataSource.getAllUsers()
     }
+
+    suspend fun getCount(): Boolean {
+        return localDataSource.isEmpty()
+    }
+
 
 }

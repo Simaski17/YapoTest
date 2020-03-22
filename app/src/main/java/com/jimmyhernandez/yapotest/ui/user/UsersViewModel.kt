@@ -4,24 +4,33 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.ittalent.testitandroid.ui.common.Data
 import com.jimmyhernandez.domain.users.UserResponse
-import com.jimmyhernandez.usecases.GetAllUsers
+import com.jimmyhernandez.usecases.GetAllUsersUseCase
+import com.jimmyhernandez.usecases.GetCountUseCase
 import com.jimmyhernandez.usecases.GetListUsersUseCase
 import com.jimmyhernandez.yapotest.ui.common.ScopedViewModel
+import com.jimmyhernandez.yapotest.ui.common.postException
 import com.jimmyhernandez.yapotest.ui.common.postLoading
+import com.jimmyhernandez.yapotest.ui.common.postValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class UsersViewModel(private val getListUsersUseCase: GetListUsersUseCase, private val getAllUsers: GetAllUsers): ScopedViewModel() {
+class UsersViewModel(
+    private val getListUsersUseCase: GetListUsersUseCase,
+    private val getAllUsersUseCase: GetAllUsersUseCase,
+    private val getCountUseCase: GetCountUseCase
+) : ScopedViewModel() {
 
 
     val model = MutableLiveData<Data<ArrayList<UserResponse>>>()
+    val modelGetAll = MutableLiveData<Data<List<UserResponse>>>()
+    val modelCount = MutableLiveData<Data<Boolean>>()
 
     init {
         initScope()
     }
 
-    fun getListUsers(){
+    fun getListUsers() {
 
         launch {
             model.postLoading()
@@ -31,8 +40,10 @@ class UsersViewModel(private val getListUsersUseCase: GetListUsersUseCase, priva
                     getListUsersUseCase.invoke()
                 }
             }.onSuccess { response ->
-                if (response.isNotEmpty()){
-                    Log.e("RESPONSE", "RESPONSE $response")
+                if (response.isNotEmpty()) {
+                    model.postValue(response)
+                } else {
+                    model.postException(Exception("${"Error"}: ${response.isEmpty().toString()}"))
                 }
             }.onFailure {
 
@@ -40,18 +51,37 @@ class UsersViewModel(private val getListUsersUseCase: GetListUsersUseCase, priva
         }
     }
 
-    fun getAllUsers(){
+    fun getAllUsers() {
         launch {
-            model.postLoading()
+            modelGetAll.postLoading()
 
             runCatching {
                 withContext(Dispatchers.IO) {
-                    getAllUsers.invoke()
+                    getAllUsersUseCase.invoke()
                 }
             }.onSuccess { response ->
-                if (response.isNotEmpty()){
-                    Log.e("RESPONSE", "RESPONSE USERS $response")
+                if (response.isNotEmpty()) {
+                    modelGetAll.postValue(response)
+                } else {
+                    modelGetAll.postException(Exception("${"Error"}: ${response.isEmpty().toString()}"))
                 }
+            }.onFailure {
+
+            }
+        }
+    }
+
+    fun getCount() {
+        launch {
+            modelCount.postLoading()
+
+            runCatching {
+                withContext(Dispatchers.IO) {
+                    getCountUseCase.invoke()
+                }
+            }.onSuccess { response ->
+                modelCount.postValue(response)
+                Log.e("RESPONSE", "RESPONSE GETCOUNT $response")
             }.onFailure {
 
             }

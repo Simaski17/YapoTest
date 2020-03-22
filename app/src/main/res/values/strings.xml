@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">YapoTest</string>
+    <string name="userTitle">Usuario:</string>
+    <string name="nameTitle">Nombre:</string>
+    <string name="mailTitle">Email:</string>
+    <string name="title_users_list">Listado de Usuarios</string>
+    <string name="show_users_list">Mostrar listado de Usuarios</string>
+    <string name="title_users_favorite__list">Listado de Usuarios Favoritos</string>
+    <string name="show_users_favorite__list">Mostrar listado de Usuarios Favoritos</string>
+    <string name="title_dialog_base">No tiene conexión</string>
+    <string name="message_dialog_base">Actualmente no tiene una conexión de red. Por favor verifique su conexíon e intente de nuevo</string>
+    <string name="button_settings">Ir a la configuración</string>
+    <string name="button_exit">Salir</string>
+
+    <string name="not_users">No hay usuarios</string>
+    <string name="not_favorite_users">No tiene usuarios Favoritos</string>
+
 </resources>

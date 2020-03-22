@@ -4,5 +4,5 @@ import com.jimmyhernandez.domain.users.UserResponse
 
 interface RemoteDataSource {
 
-    suspend fun getListUsers(): List<UserResponse>
+    suspend fun getListUsers(): ArrayList<UserResponse>
 }

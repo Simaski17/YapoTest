@@ -7,6 +7,6 @@ import retrofit2.http.GET
 interface TheYapoDbService {
 
     @GET("users")
-    fun getListUsers(): Call<List<UserResponse>>
+    fun getListUsers(): Call<ArrayList<UserResponse>>
 
 }

@@ -1,14 +1,32 @@
 package com.jimmyhernandez.yapotest.ui.common
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import com.ittalent.testitandroid.ui.common.Data
 import com.ittalent.testitandroid.ui.common.DataState
 import com.jimmyhernandez.yapotest.YapoApp
+import kotlin.properties.Delegates
+
+inline fun <reified T : Activity> Context.intentFor(body: Intent.() -> Unit): Intent =
+    Intent(this, T::class.java).apply(body)
+
+inline fun <reified T : Activity> Context.startActivity(body: Intent.() -> Unit) {
+    startActivity(intentFor<T>(body))
+}
+
 
 /* Live data */
 
@@ -47,6 +65,34 @@ inline fun <reified T : ViewModel> FragmentActivity.getViewModel(crossinline fac
 fun <T> T?.with(block: T.() -> Unit) = this?.let(block)
 
 inline fun <T> T?.notNull(exec: (T) -> Unit): T? = this?.also { exec(this) }
+
+fun AppCompatActivity.finishWithResult(resultCode: Int, data: Intent? = null) {
+    setResult(resultCode, data)
+    finish()
+}
+
+inline fun <VH : RecyclerView.ViewHolder, T> RecyclerView.Adapter<VH>.basicDiffUtil(
+    initialValue: List<T>,
+    crossinline areItemsTheSame: (T, T) -> Boolean = { old, new -> old == new },
+    crossinline areContentsTheSame: (T, T) -> Boolean = { old, new -> old == new }
+) =
+    Delegates.observable(initialValue) { _, old, new ->
+        DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+                areItemsTheSame(old[oldItemPosition], new[newItemPosition])
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+                areContentsTheSame(old[oldItemPosition], new[newItemPosition])
+
+            override fun getOldListSize(): Int = old.size
+
+            override fun getNewListSize(): Int = new.size
+        }).dispatchUpdatesTo(this@basicDiffUtil)
+    }
+
+fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = true): View =
+    LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
+
 
 val Context.app: YapoApp
     get() = applicationContext as YapoApp
