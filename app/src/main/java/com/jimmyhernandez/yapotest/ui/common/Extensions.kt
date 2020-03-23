@@ -6,6 +6,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
@@ -15,6 +16,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.ittalent.testitandroid.ui.common.Data
 import com.ittalent.testitandroid.ui.common.DataState
 import com.jimmyhernandez.yapotest.YapoApp
@@ -92,6 +96,13 @@ inline fun <VH : RecyclerView.ViewHolder, T> RecyclerView.Adapter<VH>.basicDiffU
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int, attachToRoot: Boolean = true): View =
     LayoutInflater.from(context).inflate(layoutRes, this, attachToRoot)
+
+val requestOptions = RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)
+
+fun ImageView.loadUrl(url: String) {
+    Glide.with(context).load(url).apply(requestOptions).into(this)
+}
+
 
 
 val Context.app: YapoApp

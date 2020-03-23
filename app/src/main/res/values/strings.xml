@@ -12,7 +12,19 @@
     <string name="button_settings">Ir a la configuración</string>
     <string name="button_exit">Salir</string>
 
-    <string name="not_users">No hay usuarios</string>
+    <string name="not_users">No tiene Conexión a internet. No se puede acceder a los usuarios </string>
     <string name="not_favorite_users">No tiene usuarios Favoritos</string>
+    <string name="username_title">Nombre de usuario:</string>
+    <string name="addressTitle">Dirección:</string>
+    <string name="streetTitle">Calle:</string>
+    <string name="suiteTitle">Dpto:</string>
+    <string name="cityTitle">Ciudad:</string>
+    <string name="zipcodeTitle">Cod. Postal:</string>
+    <string name="catchPhraseTitle">Frase Clave:</string>
+    <string name="companyTitle">Compañia:</string>
+    <string name="otherTitle">Otra:</string>
+    <string name="phoneTitle">Telefono:</string>
+    <string name="websiteTitle">Web:</string>
+    <string name="listAlbumTitle">Listado de Albumes:</string>
 
 </resources>

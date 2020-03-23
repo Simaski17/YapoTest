@@ -1,9 +1,10 @@
 package com.jimmyhernandez.yapotest.data.database
 
 import com.jimmyhernandez.data.source.LocalDataSource
+import com.jimmyhernandez.domain.albums.Albums
+import com.jimmyhernandez.domain.photos.Photos
 import com.jimmyhernandez.domain.users.UserResponse
-import com.jimmyhernandez.yapotest.data.toDomainuser
-import com.jimmyhernandez.yapotest.data.toRoomUser
+import com.jimmyhernandez.yapotest.data.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -21,5 +22,27 @@ class RoomDataSource(db: UsersDatabase): LocalDataSource {
     override suspend fun getAllUsers(): List<UserResponse> = withContext(Dispatchers.IO) {
         usersDao.getAllUsers().map { it.toDomainuser() }
     }
+
+    override suspend fun findById(id: Int): UserResponse  = withContext(Dispatchers.IO) {
+       usersDao.findById(id).toDomainuser()
+    }
+
+    //ALBUMS
+    override suspend fun saveAlbumsList(albums: List<Albums>) {
+        withContext(Dispatchers.IO) { usersDao.insertAlbums(albums = albums.map { it.toRoomAlbums() }) }
+    }
+
+    override suspend fun findAlbumById(id: Int): List<Albums> = withContext(Dispatchers.IO) {
+        usersDao.findAlbumsById(id).map { it.toDomainAlbum() }
+    }
+
+    override suspend fun saveAlbumsDetailList(albums: List<Photos>) {
+        withContext(Dispatchers.IO) { usersDao.insertAlbumsDetails(albums = albums.map { it.toRoomPhotos() }) }
+    }
+
+    override suspend fun findAlbumDetailById(id: Int): List<Photos> = withContext(Dispatchers.IO) {
+        usersDao.findAlbumDetailById(id).map { it.toDomainPhotos() }
+    }
+
 
 }

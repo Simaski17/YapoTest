@@ -16,6 +16,7 @@ import com.jimmyhernandez.domain.users.UserResponse
 import com.jimmyhernandez.yapotest.R
 import com.jimmyhernandez.yapotest.ui.common.ConnectivityReceiver
 import com.jimmyhernandez.yapotest.ui.common.*
+import com.jimmyhernandez.yapotest.ui.detail.DetailActivity
 import kotlinx.android.synthetic.main.activity_users.*
 
 class UsersActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityReceiverListener {
@@ -28,9 +29,9 @@ class UsersActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRece
     private val viewModel: UsersViewModel by lazy { getViewModel { component.usersViewModel } }
     private lateinit var usersAdapter: UsersAdapter
     private var favorite: Boolean = false
+    private var isConnectedNet: Boolean = false
     private var viewIfl: View? = null
-    private var mNetworkReceiver =
-        ConnectivityReceiver()
+    private var mNetworkReceiver = ConnectivityReceiver()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +41,6 @@ class UsersActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRece
         component = app.component.plus(UsersActivityModule())
 
         viewModel.model.observe(this, Observer(::updateUi))
-        viewModel.modelGetAll.observe(this, Observer(::showData))
         viewModel.modelCount.observe(this, Observer(::getCount))
 
         favorite = intent.getBooleanExtra(FAVORITE, false)
@@ -55,9 +55,9 @@ class UsersActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRece
             layoutManager = LinearLayoutManager(context)
 
             usersAdapter = UsersAdapter() {
-//                startActivity<DetailActivity>{
-//                    putExtra(DetailActivity.SONG, it.trackId)
-//                }
+                startActivity<DetailActivity>{
+                    putExtra(DetailActivity.ALBUM, it.id)
+                }
             }
             rvUsersList.adapter = usersAdapter
 
@@ -68,31 +68,8 @@ class UsersActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRece
     }
 
 
-    private fun updateUi(event: Data<ArrayList<UserResponse>>?) {
+    private fun updateUi(event: Data<List<UserResponse>>?) {
 
-        event.with {
-            when (dataState) {
-                DataState.LOADING -> {
-                    pbUsersList.visibility = VISIBLE
-                }
-                DataState.SUCCESS -> {
-                    pbUsersList.visibility = GONE
-                    rvUsersList.visibility = VISIBLE
-                }
-                DataState.ERROR -> {
-                }
-            }
-
-            data.notNull {
-                usersAdapter.updateUsersList(it)
-            }
-        }
-
-
-    }
-
-
-    private fun showData(event: Data<List<UserResponse>>?) {
         event.with {
             when (dataState) {
                 DataState.LOADING -> {
@@ -111,7 +88,31 @@ class UsersActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRece
                 usersAdapter.updateUsersList(lista)
             }
         }
+
+
     }
+
+
+//    private fun showData(event: Data<List<UserResponse>>?) {
+//        event.with {
+//            when (dataState) {
+//                DataState.LOADING -> {
+//                    pbUsersList.visibility = VISIBLE
+//                }
+//                DataState.SUCCESS -> {
+//                    pbUsersList.visibility = GONE
+//                    rvUsersList.visibility = VISIBLE
+//                }
+//                DataState.ERROR -> {
+//                }
+//            }
+//
+//            data.notNull {
+//                var lista = ArrayList(it)
+//                usersAdapter.updateUsersList(lista)
+//            }
+//        }
+//    }
 
     private fun getCount(event: Data<Boolean>) {
         event.with {
@@ -127,31 +128,21 @@ class UsersActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRece
                     if (favorite) {
                         tvNotUserFavorite.text = getString(R.string.not_favorite_users)
                     } else {
-                        tvNotUserFavorite.text = getString(R.string.not_users)
+                        if(isConnectedNet) {
+                            tvNotUserFavorite.visibility = GONE
+                            viewModel.getListUsers()
+                        }else {
+                            tvNotUserFavorite.text = getString(R.string.not_users)
+                        }
                     }
                 } else {//>0
                     if (favorite) {
                         tvNotUserFavorite.visibility = VISIBLE
                     } else {
                         tvNotUserFavorite.visibility = GONE
+                        viewModel.getAllUsers()
                     }
                 }
-
-
-//                if (!favorite) {
-//                    tvTitleUsersList.text = getString(R.string.title_users_list)
-//                    if (verifyAvailableNetwork(this@UsersActivity)) {
-//                        viewModel.getListUsers()
-//                    } else {
-//                        tvTitleUsersList.text = getString(R.string.title_users_favorite__list)
-//                        viewModel.getAllUsers()
-//                    }
-//                } else {
-//                    Log.e("FAVORITE", "FAVORITE " + favorite)
-//                    viewModel.getCount()
-//                }
-
-
             }
         }
     }
@@ -172,6 +163,7 @@ class UsersActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRece
     }
 
     override fun onNetworkConnectionChanged(isConnected: Boolean) {
+        isConnectedNet = isConnected
         if (!isConnected) {
             if (viewIfl == null) {
                 viewIfl = View(applicationContext)

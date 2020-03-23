@@ -17,5 +17,22 @@ interface UserResponseDao {
     @Query("SELECT * FROM UserResponse")
     fun getAllUsers(): List<UserResponse>
 
+    @Query("SELECT * FROM userresponse WHERE id = :id")
+    fun findById(id: Int): UserResponse
+
+    //Albums
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAlbums(albums: List<Albums>)
+
+    @Query("SELECT * FROM albums WHERE userId = :userId")
+    fun findAlbumsById(userId: Int): List<Albums>
+
+    //AlbumsDetails
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAlbumsDetails(albums: List<Photos>)
+
+    @Query("SELECT * FROM photos WHERE albumId = :albumId")
+    fun findAlbumDetailById(albumId: Int): List<Photos>
+
 
 }

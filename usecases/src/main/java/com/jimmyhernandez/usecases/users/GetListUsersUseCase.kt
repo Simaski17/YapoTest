@@ -1,10 +1,10 @@
-package com.jimmyhernandez.usecases
+package com.jimmyhernandez.usecases.users
 
 import com.jimmyhernandez.data.repository.UsersRepository
 import com.jimmyhernandez.domain.users.UserResponse
 
 class GetListUsersUseCase(private val usersRepository: UsersRepository) {
 
-    suspend fun invoke(): ArrayList<UserResponse> = usersRepository.getListUsers()
+    suspend fun invoke(): List<UserResponse> = usersRepository.getListUsers()
 
 }

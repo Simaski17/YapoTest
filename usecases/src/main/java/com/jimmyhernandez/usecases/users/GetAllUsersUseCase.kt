@@ -1,4 +1,4 @@
-package com.jimmyhernandez.usecases
+package com.jimmyhernandez.usecases.users
 
 import com.jimmyhernandez.data.repository.UsersRepository
 import com.jimmyhernandez.domain.users.UserResponse
