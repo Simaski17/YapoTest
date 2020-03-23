@@ -3,6 +3,7 @@ package com.jimmyhernandez.data.source
 import com.jimmyhernandez.domain.albums.Albums
 import com.jimmyhernandez.domain.photos.Photos
 import com.jimmyhernandez.domain.users.UserResponse
+import com.sun.org.apache.xpath.internal.operations.Bool
 
 interface LocalDataSource {
 
@@ -14,5 +15,7 @@ interface LocalDataSource {
     suspend fun findAlbumById(id: Int): List<Albums>
     suspend fun saveAlbumsDetailList(albums: List<Photos>)
     suspend fun findAlbumDetailById(id: Int): List<Photos>
+    suspend fun updateUser(userResponse: UserResponse)
+    suspend fun getFavoriteUsers(favorite: Boolean): List<UserResponse>
 
 }

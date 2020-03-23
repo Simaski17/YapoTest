@@ -1,9 +1,6 @@
 package com.jimmyhernandez.yapotest.data.database
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface UserResponseDao {
@@ -33,6 +30,12 @@ interface UserResponseDao {
 
     @Query("SELECT * FROM photos WHERE albumId = :albumId")
     fun findAlbumDetailById(albumId: Int): List<Photos>
+
+    @Update
+    fun updateUser(userResponse: UserResponse)
+
+    @Query("SELECT * FROM userresponse WHERE favorite = :favorite")
+    fun getFavoriteUser(favorite: Boolean): List<UserResponse>
 
 
 }

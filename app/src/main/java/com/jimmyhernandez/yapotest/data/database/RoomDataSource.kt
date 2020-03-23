@@ -44,5 +44,13 @@ class RoomDataSource(db: UsersDatabase): LocalDataSource {
         usersDao.findAlbumDetailById(id).map { it.toDomainPhotos() }
     }
 
+    override suspend fun updateUser(userResponse: UserResponse) {
+        withContext(Dispatchers.IO) { usersDao.updateUser(userResponse.toRoomUser()) }
+    }
+
+    override suspend fun getFavoriteUsers(favorite: Boolean): List<UserResponse> = withContext(Dispatchers.IO) {
+        usersDao.getFavoriteUser(true).map { it.toDomainuser() }
+    }
+
 
 }

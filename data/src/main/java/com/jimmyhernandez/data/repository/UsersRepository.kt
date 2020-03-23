@@ -22,5 +22,10 @@ class UsersRepository(private val localDataSource: LocalDataSource, private val 
 
     suspend fun findById(id: Int): UserResponse = localDataSource.findById(id)
 
+    suspend fun updateUser(user: UserResponse) = localDataSource.updateUser(user)
+
+    suspend fun getFavoriteUsers(): List<UserResponse> {
+        return localDataSource.getFavoriteUsers(true)
+    }
 
 }

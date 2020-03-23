@@ -31,6 +31,7 @@ class DetailActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRec
     private var isConnectedNet: Boolean = false
     private var viewIfl: View? = null
     private var mNetworkReceiver = ConnectivityReceiver()
+    private lateinit var user: UserResponse
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +56,10 @@ class DetailActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRec
             rvAlbumList.adapter = detailAdapter
         }
 
+        fabFavorite.setOnClickListener {
+            viewModel.onFavoriteClicked(user)
+        }
+
     }
 
     private fun updateUi(event: Data<UserResponse>?) {
@@ -70,6 +75,8 @@ class DetailActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRec
             }
 
             data.notNull {
+                user = it
+
                 tvNameUserDetail.text = it.name
                 tvMailUserDetail.text = it.email
                 tvUserNameUserDetail.text = it.username
@@ -84,6 +91,9 @@ class DetailActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRec
 
                 tvPhoneUserDetail.text = it.phone
                 tvWebsitwUserDetail.text = it.website
+
+                val icon = if (it.favorite) R.drawable.ic_star else R.drawable.ic_star_border
+                fabFavorite.setImageDrawable(getDrawable(icon))
 
                 viewModel.findAlbum()
             }

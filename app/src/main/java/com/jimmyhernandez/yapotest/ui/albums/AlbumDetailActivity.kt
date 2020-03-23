@@ -5,6 +5,8 @@ import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ittalent.testitandroid.ui.common.Data
@@ -56,20 +58,20 @@ class AlbumDetailActivity : AppCompatActivity(), ConnectivityReceiver.Connectivi
         event.with {
             when (dataState) {
                 DataState.LOADING -> {
-//                    tvNotAlbumDetail.visibility = GONE
-//                    pbRecyclerAlbumsDetails.visibility = VISIBLE
+                    tvAlbumDetailPhoto.visibility = GONE
+                    pbAlbumDetail.visibility = VISIBLE
                 }
                 DataState.SUCCESS -> {
-//                    tvNotAlbumDetail.visibility = GONE
-//                    pbRecyclerAlbumsDetails.visibility = GONE
+                    tvAlbumDetailPhoto.visibility = GONE
+                    pbAlbumDetail.visibility = GONE
                 }
                 DataState.ERROR -> {
-//                    pbRecyclerAlbumsDetails.visibility = GONE
+                    pbAlbumDetail.visibility = GONE
                     if (isConnectedNet) {
                         viewModel.getListAlbumsDetail()
                     } else {
-//                        tvNotAlbumDetail.visibility = VISIBLE
-//                        tvNotAlbumDetail.text = "No hay álbumes asociados a este usuario"
+                        tvAlbumDetailPhoto.visibility = VISIBLE
+                        tvAlbumDetailPhoto.text = "No hay detalles asociados a este album"
                     }
                 }
             }

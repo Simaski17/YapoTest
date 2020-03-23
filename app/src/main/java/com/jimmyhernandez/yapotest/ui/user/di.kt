@@ -3,6 +3,7 @@ package com.jimmyhernandez.yapotest.ui.user
 import com.jimmyhernandez.data.repository.UsersRepository
 import com.jimmyhernandez.usecases.users.GetAllUsersUseCase
 import com.jimmyhernandez.usecases.users.GetCountUsersUseCase
+import com.jimmyhernandez.usecases.users.GetListFavoriteUserUseCase
 import com.jimmyhernandez.usecases.users.GetListUsersUseCase
 import dagger.Module
 import dagger.Provides
@@ -13,8 +14,8 @@ import dagger.Subcomponent
 class UsersActivityModule(){
 
     @Provides
-    fun usersViewModelProvider(getListUsersUseCase: GetListUsersUseCase, getAllUsersUseCase: GetAllUsersUseCase, getCountUsersUseCase: GetCountUsersUseCase): UsersViewModel {
-        return UsersViewModel(getListUsersUseCase, getAllUsersUseCase, getCountUsersUseCase)
+    fun usersViewModelProvider(getListUsersUseCase: GetListUsersUseCase, getAllUsersUseCase: GetAllUsersUseCase, getCountUsersUseCase: GetCountUsersUseCase, getListFavoriteUserUseCase: GetListFavoriteUserUseCase): UsersViewModel {
+        return UsersViewModel(getListUsersUseCase, getAllUsersUseCase, getCountUsersUseCase, getListFavoriteUserUseCase)
     }
 
     @Provides
@@ -28,6 +29,10 @@ class UsersActivityModule(){
     @Provides
     fun getCountUseCaseProvider(usersRepository: UsersRepository) =
         GetCountUsersUseCase(usersRepository)
+
+    @Provides
+    fun getListFavoriteUserUseCaseProvider(usersRepository: UsersRepository) =
+        GetListFavoriteUserUseCase(usersRepository)
 
 }
 

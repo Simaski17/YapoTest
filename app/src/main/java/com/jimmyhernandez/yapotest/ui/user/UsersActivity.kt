@@ -92,28 +92,6 @@ class UsersActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRece
 
     }
 
-
-//    private fun showData(event: Data<List<UserResponse>>?) {
-//        event.with {
-//            when (dataState) {
-//                DataState.LOADING -> {
-//                    pbUsersList.visibility = VISIBLE
-//                }
-//                DataState.SUCCESS -> {
-//                    pbUsersList.visibility = GONE
-//                    rvUsersList.visibility = VISIBLE
-//                }
-//                DataState.ERROR -> {
-//                }
-//            }
-//
-//            data.notNull {
-//                var lista = ArrayList(it)
-//                usersAdapter.updateUsersList(lista)
-//            }
-//        }
-//    }
-
     private fun getCount(event: Data<Boolean>) {
         event.with {
             when (dataState) {
@@ -137,7 +115,8 @@ class UsersActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRece
                     }
                 } else {//>0
                     if (favorite) {
-                        tvNotUserFavorite.visibility = VISIBLE
+                        tvNotUserFavorite.visibility = GONE
+                        viewModel.getFavoriteUser()
                     } else {
                         tvNotUserFavorite.visibility = GONE
                         viewModel.getAllUsers()

@@ -9,6 +9,7 @@ import com.jimmyhernandez.domain.users.UserResponse
 import com.jimmyhernandez.usecases.albums.FindAlbumById
 import com.jimmyhernandez.usecases.albums.GetListAlbumsUseCase
 import com.jimmyhernandez.usecases.users.FindUserById
+import com.jimmyhernandez.usecases.users.UpdateUserUsecase
 import com.jimmyhernandez.yapotest.ui.common.ScopedViewModel
 import com.jimmyhernandez.yapotest.ui.common.postException
 import com.jimmyhernandez.yapotest.ui.common.postLoading
@@ -17,7 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class DetailViewModel(private val id: Int, private val findUserById: FindUserById, private val findAlbumById: FindAlbumById, private val getListAlbumsUseCase: GetListAlbumsUseCase) : ScopedViewModel() {
+class DetailViewModel(private val id: Int, private val findUserById: FindUserById, private val findAlbumById: FindAlbumById, private val getListAlbumsUseCase: GetListAlbumsUseCase, private val updateUserUsecase: UpdateUserUsecase) : ScopedViewModel() {
 
     val model = MutableLiveData<Data<UserResponse>>()
     val modelListAlbums = MutableLiveData<Data<List<Albums>>>()
@@ -88,6 +89,28 @@ class DetailViewModel(private val id: Int, private val findUserById: FindUserByI
 
             }.onFailure { throwable ->
                 modelListAlbums.postException(throwable)
+            }
+
+        }
+    }
+
+    fun onFavoriteClicked(userResponse: UserResponse){
+        launch {
+            model.postLoading()
+
+            runCatching {
+                withContext(Dispatchers.IO){
+                    updateUserUsecase.invoke(userResponse)
+                }
+            }.onSuccess { response ->
+                if (response.id != 0){
+                    model.postValue(response)
+                } else {
+                    model.postException(Exception("${"No hay Albumes con ese id en la base de datos"}: "))
+                }
+
+            }.onFailure { throwable ->
+                model.postException(throwable)
             }
 
         }
